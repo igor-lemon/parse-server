@@ -81,14 +81,14 @@ export class FilesRouter {
         .getFileData(config, filename)
         .then(data => {
           res.status(200);
-          res.set('Content-Type', contentType);
-          res.set('Content-Length', data.length);
-          res.end(data);
+          res.set('Content-Type', data.ContentType || contentType);
+          res.set('Content-Length', data.ContentLength || data.Body.length);
+          res.end(data.Body || data);
         })
-        .catch(() => {
+        .catch((error) => {
           res.status(404);
           res.set('Content-Type', 'text/plain');
-          res.end('File not found.');
+          res.end(`File not found. Details: ${error}`);
         });
     }
   }
